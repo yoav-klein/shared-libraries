@@ -1,6 +1,8 @@
 
 #include <stdio.h>
 
+void call_bar();
+
 void foo();
 void bar();
 
