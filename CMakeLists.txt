@@ -8,4 +8,4 @@ add_executable(main main.c)
 target_link_directories(main
 	PUBLIC libs)
 	
-target_link_libraries(main libfoo.so.0.1.0)
+target_link_libraries(main libfoo.so)
