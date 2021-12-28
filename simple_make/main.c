@@ -1,10 +1,13 @@
 
 #include <stdio.h>
 
-void call_bar();
+#include "foo.h"
 
-void foo();
-void bar();
+/*
+void foo()
+{
+	printf("Main Foo\n");
+}*/
 
 int main()
 {
