@@ -10,7 +10,7 @@ main_static.out: main.o $(STATICNAME)
 	$(CC) main.o -L. -lfoo -o $@
 
 main_shared.out: main.o $(SONAME)
-	$(CC) main.o -L. -lfoo -o $@ -Wl,-rpath=.
+	$(CC) main.o -L. -lfoo -o $@ -Wl,-rpath=$ORIGIN
 
 main.o: main.c
 	$(CC) -c main.c

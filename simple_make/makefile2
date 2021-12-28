@@ -1,0 +1,30 @@
+
+
+CC=gcc
+SONAME=libfoo.so
+STATICNAME=libfoo.a
+INCDIR=.
+LIBFOO=libfoo.so
+LIBBAR=libbar.so
+
+main.out: main.o $(LIBFOO) $(LIBBAR)
+	$(CC) main.o -L. -lbar -lfoo  -o $@ -Wl,-rpath=$$ORIGIN
+
+main.o: main.c
+	$(CC) -c main.c
+
+libbar.so: bar.o
+	$(CC) -shared -o $@ $^
+libfoo.so: foo.o
+	$(CC) -shared -o $@ $^
+
+bar.o: bar.c
+	$(CC) -c -fpic -o $@ $^
+	
+foo.o: foo.c
+	$(CC) -c -fpic -o $@ $^ 
+
+.PHONY: clean	
+clean:
+	rm *.o *.so* *.out *.a
+
