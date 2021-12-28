@@ -5,8 +5,6 @@ SONAME=libfoo.so
 STATICNAME=libfoo.a
 INCDIR=.
 
-.PHONY: shared
-shared: $(LIBNAME)
 
 main_static.out: main.o $(STATICNAME)
 	$(CC) main.o -L. -lfoo -o $@
@@ -17,14 +15,19 @@ main_shared.out: main.o $(SONAME)
 main.o: main.c
 	$(CC) -c main.c
 
-$(SONAME): foo.o
+.PHONY: shared
+shared: $(SONAME)
+$(SONAME): foo.o bar.o
 	$(CC) -shared -o $@ $^
 
 .PHONY: static
 static: $(STATICNAME)
-$(STATICNAME): foo.o
+$(STATICNAME): foo.o bar.o
 	ar -rc $@ $^
 
+bar.o: bar.c
+	$(CC) -c -fpic -o $@ $^
+	
 foo.o: foo.c
 	$(CC) -c -fpic -o $@ $^ 
 

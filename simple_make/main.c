@@ -12,9 +12,9 @@ void foo()
 int main()
 {
 	foo();
-	bar();
+	/*bar();
 	
 	call_bar();
-	
+	*/
 	return 0;
 }
