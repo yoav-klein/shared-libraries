@@ -13,13 +13,16 @@ SHELL=/bin/bash
 LDFLAGS = -L. -lfoo -lbar
 
 STATIC_LIBS=libfoo.a libbar.a
-SHARED_LIBS=libfoo.so libbar.so
+SHARED_LIBS=libbar.so libfoo.so
 
 static: main.o $(STATIC_LIBS)
 	$(CC) $(LDFLAGS) $^ -o $@
 
+test:
+	echo \$$OATH
+
 shared: main.o $(SHARED_LIBS)
-	$(CC) $(LDFLAGS) -Wl,-rpath=\$$$\\ORIGIN $^ -o $@  # I know the \$$$\\ORIGIN is weird, but works.
+	$(CC) $(LDFLAGS) -Wl,-rpath=\$$ORIGIN $^ -o $@ 
 
 main.o: main.c
 	@echo -e "$(GREEN)Compiling main.o$(RESET)"
