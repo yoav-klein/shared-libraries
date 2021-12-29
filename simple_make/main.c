@@ -2,7 +2,7 @@
 #include <stdio.h>
 
 #include "foo.h"
-
+#include "bar.h"
 /*
 void foo()
 {
@@ -12,9 +12,9 @@ void foo()
 int main()
 {
 	foo();
-	/*bar();
+	bar();
 	
-	call_bar();
-	*/
+	foobar();
+	
 	return 0;
 }

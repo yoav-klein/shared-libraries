@@ -1,3 +1,3 @@
 
 void foo();
-void call_bar();
+void foobar();

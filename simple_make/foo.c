@@ -5,12 +5,11 @@
 
 void foo()
 {
-	printf("Foo from library!\n");
+	printf("Foo!\n");
 }
 
 
-void call_bar() 
+void foobar() 
 {
-	printf("Calling bar\n");
-	bar();
+	printf("Foobar from foo\n");
 }
