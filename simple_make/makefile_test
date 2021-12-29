@@ -1,0 +1,12 @@
+
+
+CFLAGS=-Wall
+DEBUG ?= 1
+ifeq ($(DEBUG), 1)
+	CFLAGS+=-g
+else
+	CFLAGS+=-O3
+endif
+
+all:
+	@echo $(CFLAGS)

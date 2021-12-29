@@ -1,37 +1,56 @@
 
-
+GREEN=\e[32m
+BOLD_GREEN=\e[32;1m
+RESET=\e[0m
 CC=gcc
-SONAME=libfoo.so
-STATICNAME=libfoo.a
-INCDIR=.
+CFLAGS=-c -fPIC -Wall -Wextra -ansi -pedantic-errors
+DEBUG ?= 1
+ifeq ($(DEBUG), 1)
+	CFLAGS += -g
+endif
 
+SHELL=/bin/bash
+LDFLAGS = -L. -lfoo -lbar
 
-main_static.out: main.o $(STATICNAME)
-	$(CC) main.o -L. -lfoo -o $@
+STATIC_LIBS=libfoo.a libbar.a
+SHARED_LIBS=libfoo.so libbar.so
 
-main_shared.out: main.o $(SONAME)
-	$(CC) main.o -L. -lfoo -o $@ -Wl,-rpath=$ORIGIN
+static: main.o $(STATIC_LIBS)
+	$(CC) $(LDFLAGS) $^ -o $@
+
+shared: main.o $(SHARED_LIBS)
+	$(CC) $(LDFLAGS) -Wl,-rpath=. $^ -o $@ 
 
 main.o: main.c
-	$(CC) -c main.c
+	@echo -e "$(GREEN)Compiling main.o$(RESET)"
+	@$(CC) $(CFLAGS) main.c
 
-.PHONY: shared
-shared: $(SONAME)
-$(SONAME): foo.o bar.o
-	$(CC) -shared -o $@ $^
+libfoo.a: foo.o
+	@echo -e "$(BOLD_GREEN)Creating libfoo.a$(RESET)"
+	@ar -rc $@ $^
 
-.PHONY: static
-static: $(STATICNAME)
-$(STATICNAME): foo.o bar.o
-	ar -rc $@ $^
+libbar.a: bar.o
+	@echo -e "$(BOLD_GREEN)Creating libbar.a$(RESET)"
+	@ar -rc $@ $^
 
-bar.o: bar.c
-	$(CC) -c -fpic -o $@ $^
+libbar.so: bar.o
+	@echo -e "$(BOLD_GREEN)Creating libbar.so$(RESET)"
+	@$(CC) -shared -o $@ $^
 	
-foo.o: foo.c
-	$(CC) -c -fpic -o $@ $^ 
+libfoo.so: foo.o
+	@echo -e "$(BOLD_GREEN)Creating libfoo.so$(RESET)"
+	@$(CC) -shared -Wl,-rpath=. -o $@ $^ 
+	
+bar.o: bar.c bar.h
+	@echo -e "$(GREEN)Compiling bar.o$(RESET)"
+	@$(CC) $(CFLAGS) $<
+	
+foo.o: foo.c foo.h
+	@echo -e "$(GREEN)Compiling foo.o$(RESET)"
+	@$(CC) $(CFLAGS) $< 
+
 
 .PHONY: clean	
 clean:
-	rm *.o *.so* *.out *.a
+	rm *.o *.so* *.out *.a shared static
 
