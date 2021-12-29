@@ -19,7 +19,7 @@ static: main.o $(STATIC_LIBS)
 	$(CC) $(LDFLAGS) $^ -o $@
 
 shared: main.o $(SHARED_LIBS)
-	$(CC) $(LDFLAGS) -Wl,-rpath=. $^ -o $@ 
+	$(CC) $(LDFLAGS) -Wl,-rpath=\$$$\\ORIGIN $^ -o $@  # I know the \$$$\\ORIGIN is weird, but works.
 
 main.o: main.c
 	@echo -e "$(GREEN)Compiling main.o$(RESET)"
