@@ -9,6 +9,11 @@ void foo()
 	printf("Main Foo\n");
 }*/
 
+void in_main()
+{
+	printf("Another function in main\n");
+}
+
 int main()
 {
 	foo();
