@@ -16,10 +16,9 @@ void in_main()
 
 int main()
 {
-	foo();
+	/*foo();*/
 	bar();
-	
-	foobar();
+	here_in_main();
 	
 	return 0;
 }

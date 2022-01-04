@@ -8,6 +8,11 @@ void foo()
 	printf("Foo!\n");
 }
 
+static void foo_static()
+{
+	printf("Foo static\n");
+}
+
 
 void foobar() 
 {
