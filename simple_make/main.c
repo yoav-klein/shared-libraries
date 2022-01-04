@@ -9,12 +9,16 @@ void foo()
 	printf("Main Foo\n");
 }*/
 
+void here_in_main()
+{
+	printf("Here in main..\n");
+}
+
 int main()
 {
-	foo();
+	/*foo();*/
 	bar();
-	
-	foobar();
+	here_in_main();
 	
 	return 0;
 }
