@@ -1,0 +1,36 @@
+
+# Position Independent Code
+
+## GOT
+First, let's see GOT in action. GOT is just a table of addresses of global data, so all the references to data
+in our library is through this level of indirection. The benefits of this are:
+1. Performing relocations only in the .got section instead of the whole text section
+2. That way you can share the text section across processes.
+
+So the GOT is a table of addresses to the global data, so each reference to this data in the code will retreive this address from
+the GOT.
+
+Build the makefile and look at the assembly of the `libfoo.so`:
+```
+00000000000010f9 <func>:
+    10f9:	f3 0f 1e fa          	endbr64 
+    10fd:	55                   	push   %rbp
+    10fe:	48 89 e5             	mov    %rsp,%rbp
+    1101:	89 7d fc             	mov    %edi,-0x4(%rbp)
+    1104:	48 8b 05 d5 2e 00 00 	mov    0x2ed5(%rip),%rax        # 3fe0 <myglob-0x40>
+    110b:	8b 10                	mov    (%rax),%edx
+    110d:	8b 45 fc             	mov    -0x4(%rbp),%eax
+    1110:	01 c2                	add    %eax,%edx
+    1112:	48 8b 05 c7 2e 00 00 	mov    0x2ec7(%rip),%rax        # 3fe0 <myglob-0x40>
+    1119:	89 10                	mov    %edx,(%rax)
+    111b:	48 8b 05 be 2e 00 00 	mov    0x2ebe(%rip),%rax        # 3fe0 <myglob-0x40>
+    1122:	8b 00                	mov    (%rax),%eax
+    1124:	5d                   	pop    %rbp
+    1125:	c3                   	retq   
+
+```
+
+You can see that any reference to `myglob` is through the use of the `rip` which is the instruction pointer.
+For example, in instruction `0x1104` we add `0x2ed5` to the value of `rip`, which is `0x110b` (the next instruction) - which is `0x3fe0`.
+So we retreive what is in there - which is the address of the `myglob` variable - into `rax`. Then, we move the content of it into `eax`.
+
