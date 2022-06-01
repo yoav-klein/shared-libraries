@@ -1,0 +1,1 @@
+void myprintf(const char *str);
